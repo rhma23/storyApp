@@ -5,15 +5,14 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.LoginViewModelFactory
-import com.dicoding.storyapp.data.LoginRepository
 import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.data.pref.UserPreference
@@ -69,37 +68,38 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
 
             // Panggil fungsi loginUser dari LoginViewModel
-            loginViewModel.loginUser(email, password) { success ->
-                if (success) {
-                    // Simpan sesi pengguna jika login berhasil
-                    CoroutineScope(Dispatchers.IO).launch {
-                        userPreference.saveSession(UserModel(email, "sample_token"))
+            loginViewModel.loginUser(
+                email, password,
+                { success ->
+                    if (success) {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Yeah!")
+                            setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                val intent = Intent(context, MainActivity::class.java)
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            create()
+                            show()
+                        }
+                    } else {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Oops!")
+                            setMessage("Login gagal, silakan cek email dan password Anda.")
+                            setPositiveButton("Coba Lagi") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            create()
+                            show()
+                        }
                     }
+                },
+                dataStore = dataStore  // Pass the actual dataStore instance here
+            )
 
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Yeah!")
-                        setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                        setPositiveButton("Lanjut") { _, _ ->
-                            val intent = Intent(context, MainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
-                        }
-                        create()
-                        show()
-                    }
-                } else {
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Oops!")
-                        setMessage("Login gagal, silakan cek email dan password Anda.")
-                        setPositiveButton("Coba Lagi") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        create()
-                        show()
-                    }
-                }
-            }
         }
     }
 

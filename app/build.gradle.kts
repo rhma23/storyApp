@@ -4,7 +4,7 @@ plugins {
 }
 android {
     namespace = "com.dicoding.storyapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dicoding.storyapp"

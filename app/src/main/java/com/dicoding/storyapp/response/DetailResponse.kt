@@ -1,12 +1,12 @@
-package response
+package com.dicoding.storyapp.response
 
-data class StoryResponse(
-	val listStory: List<ListStoryItem?>? = null,
+data class Response(
 	val error: Boolean? = null,
-	val message: String? = null
+	val message: String? = null,
+	val story: Story? = null
 )
 
-data class ListStoryItem(
+data class Story(
 	val photoUrl: String? = null,
 	val createdAt: String? = null,
 	val name: String? = null,

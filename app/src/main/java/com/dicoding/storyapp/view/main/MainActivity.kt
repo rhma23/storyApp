@@ -1,30 +1,49 @@
 package com.dicoding.storyapp.view.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.storyapp.adapter.StoryAdapter
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
+import com.dicoding.storyapp.view.main.DetailActivity
+import com.dicoding.storyapp.response.ListStoryItem
 
 class MainActivity : AppCompatActivity() {
+
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var storyAdapter: StoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize RecyclerView
+        storyAdapter = StoryAdapter(emptyList()) { story ->
+            // When an item is clicked, start DetailActivity with the selected story
+            val intent = Intent(this, DetailActivity::class.java).apply {
+                putExtra("EXTRA_STORY", story) // Pass the selected story as a Parcelable extra
+            }
+            startActivity(intent)
+        }
+
+        binding.rvUpcoming.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = storyAdapter
+        }
+
+        // Observe session and check login status
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -32,9 +51,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Observe stories data
+        viewModel.storyLiveData.observe(this) { stories ->
+            storyAdapter = stories?.let {
+                StoryAdapter(it) { story ->
+                    // Handle item click here as well, if you want additional actions
+                    val intent = Intent(this, DetailActivity::class.java).apply {
+                        putExtra("EXTRA_STORY", story) // Pass the selected story as a Parcelable extra
+                    }
+                    startActivity(intent)
+                }
+            }!!
+            binding.rvUpcoming.adapter = storyAdapter
+        }
+
+        // Fetch stories from API
+        viewModel.getAllStories(false)
+
         setupView()
         setupAction()
-        playAnimation()
     }
 
     private fun setupView() {
@@ -54,22 +89,5 @@ class MainActivity : AppCompatActivity() {
         binding.logoutButton.setOnClickListener {
             viewModel.logout()
         }
-    }
-
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
-
-        AnimatorSet().apply {
-            playSequentially(name, message, logout)
-            startDelay = 100
-        }.start()
     }
 }

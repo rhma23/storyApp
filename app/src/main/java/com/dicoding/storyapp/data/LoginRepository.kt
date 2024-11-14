@@ -1,7 +1,7 @@
 package com.dicoding.storyapp.data
 
 import com.dicoding.storyapp.ApiService
-import response.LoginResponse
+import com.dicoding.storyapp.response.LoginResponse
 import javax.inject.Inject
 
 class LoginRepository @Inject constructor(

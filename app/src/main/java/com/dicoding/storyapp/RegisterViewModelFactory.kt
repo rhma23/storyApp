@@ -3,7 +3,6 @@ package com.dicoding.storyapp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.data.RegisterRepository
-import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.viewmodel.RegisterViewModel
 
 class RegisterViewModelFactory(

@@ -4,7 +4,7 @@ import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
 import com.dicoding.storyapp.RetrofitClient.apiService
-import response.LoginResponse
+import com.dicoding.storyapp.response.LoginResponse
 
 class UserRepository private constructor(
     private val userPreference: UserPreference

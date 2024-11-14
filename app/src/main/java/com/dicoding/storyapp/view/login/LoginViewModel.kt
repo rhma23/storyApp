@@ -12,7 +12,7 @@ import com.dicoding.storyapp.data.pref.UserPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import response.LoginResponse
+import com.dicoding.storyapp.response.LoginResponse
 
 private lateinit var userPreference: UserPreference
 

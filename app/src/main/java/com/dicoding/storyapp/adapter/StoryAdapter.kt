@@ -1,14 +1,18 @@
 package com.dicoding.storyapp.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.response.ListStoryItem
+import com.dicoding.storyapp.view.main.DetailActivity
 
 class StoryAdapter(private val stories: List<ListStoryItem?>, private val onItemClick: (ListStoryItem) -> Unit) :
     RecyclerView.Adapter<StoryAdapter.StoryViewHolder>() {
@@ -30,8 +34,20 @@ class StoryAdapter(private val stories: List<ListStoryItem?>, private val onItem
             .into(holder.imageView)
 
         holder.itemView.setOnClickListener {
-            // Trigger the item click listener passing the selected story
-            story?.let { onItemClick(it) }
+            story?.let { selectedStory ->
+                val intent = Intent(holder.itemView.context, DetailActivity::class.java)
+                intent.putExtra("EXTRA_STORY", selectedStory) // Pass the data to DetailActivity
+
+                // Create the animation for the shared element
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    holder.itemView.context as Activity,
+                    holder.imageView,
+                    "storyImageTransition" // This name should match the transitionName in DetailActivity
+                )
+
+                // Start the activity with the shared element transition
+                holder.itemView.context.startActivity(intent, options.toBundle())
+            }
         }
     }
 

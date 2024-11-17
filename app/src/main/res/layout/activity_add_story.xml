@@ -63,7 +63,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/descriptionLayout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
@@ -75,12 +75,11 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:minLines="1"
-            android:gravity="top"
+            android:layout_height="match_parent"
             android:backgroundTint="#673AB7"
-            />
+            android:gravity="top"
+            android:inputType="text"
+            android:minLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

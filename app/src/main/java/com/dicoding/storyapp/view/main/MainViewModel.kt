@@ -1,5 +1,6 @@
 package com.dicoding.storyapp.view.main
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +21,14 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _storyLiveData = MutableLiveData<List<ListStoryItem?>?>()
     val storyLiveData: MutableLiveData<List<ListStoryItem?>?> get() = _storyLiveData
+
+    private val _currentImageUri = MutableLiveData<Uri?>()
+    val currentImageUri: LiveData<Uri?> = _currentImageUri
+
+
+    fun setCurrentImageUri(uri: Uri?) {
+        _currentImageUri.value = uri
+    }
 
     // Observes user session and updates the LiveData
     fun getSession(): LiveData<UserModel> {

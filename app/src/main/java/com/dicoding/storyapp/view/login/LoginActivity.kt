@@ -5,24 +5,19 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.dicoding.storyapp.LoginViewModelFactory
 import com.dicoding.storyapp.data.UserRepository
-import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.pref.dataStore
 import com.dicoding.storyapp.databinding.ActivityLoginBinding
+import com.dicoding.storyapp.factory.LoginViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
 import com.dicoding.storyapp.viewmodel.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var repository: UserRepository
@@ -35,14 +30,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Initialize UserPreference and UserRepository
+        val userPreference = UserPreference.getInstance(dataStore)
+        val repository = UserRepository.getInstance(userPreference)
 
-        userPreference = UserPreference.getInstance(dataStore)
-        
-        // Inisialisasi repository dan ViewModel
-        // Gunakan metode getInstance() untuk mendapatkan instance dari UserRepository
-        repository = UserRepository.getInstance(UserPreference.getInstance(dataStore))
-
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory(repository)).get(LoginViewModel::class.java)
+        // Initialize ViewModel using LoginViewModelFactory
+        val factory = LoginViewModelFactory(repository)
+        loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         setupView()
         setupAction()

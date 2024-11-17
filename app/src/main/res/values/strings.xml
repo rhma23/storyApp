@@ -14,4 +14,6 @@
     <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
     <string name="story">Story</string>
+    <string name="Gallery">Gallery</string>
+    <string name="Camera">Camera</string>
 </resources>

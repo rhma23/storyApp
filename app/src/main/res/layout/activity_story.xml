@@ -75,12 +75,11 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:minLines="1"
-            android:gravity="top"
+            android:layout_height="231dp"
             android:backgroundTint="#673AB7"
-            />
+            android:gravity="top"
+            android:inputType="text"
+            android:minLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

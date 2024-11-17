@@ -1,6 +1,6 @@
 package com.dicoding.storyapp.data
 
-import response.RegisterResponse
+import com.dicoding.storyapp.response.RegisterResponse
 import com.dicoding.storyapp.ApiService
 import javax.inject.Inject
 

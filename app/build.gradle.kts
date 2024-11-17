@@ -4,7 +4,7 @@ plugins {
 }
 android {
     namespace = "com.dicoding.storyapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dicoding.storyapp"
@@ -63,5 +63,11 @@ dependencies {
 //    kapt("com.google.dagger:hilt-android-compiler:2.44")  // atau versi terbaru Hilt
 
     implementation ("com.google.android.material:material:1.9.0") //korner
+
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
+
+
 
 }

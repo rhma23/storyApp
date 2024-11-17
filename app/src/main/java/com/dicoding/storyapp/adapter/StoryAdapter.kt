@@ -1,5 +1,5 @@
 package com.dicoding.storyapp.adapter
-
+//rahma
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater

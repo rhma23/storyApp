@@ -12,10 +12,9 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.storyapp.RegisterViewModelFactory
 import com.dicoding.storyapp.RetrofitClient
+import com.dicoding.storyapp.ViewModelFactory
 import com.dicoding.storyapp.data.RegisterRepository
-import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
 import com.dicoding.storyapp.viewmodel.RegisterViewModel // Pastikan import ini ada
 
@@ -24,7 +23,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var repository: RegisterRepository
 
     private val registerViewModel: RegisterViewModel by viewModels {
-        RegisterViewModelFactory(repository)
+        ViewModelFactory(repository)
     }
 
 

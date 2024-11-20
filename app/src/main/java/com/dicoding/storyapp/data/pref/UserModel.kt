@@ -5,4 +5,11 @@ data class UserModel(
     val name: String,
     val token: String,
     val isLogin: Boolean = false
-)
+) {
+    companion object {
+        val name: String = ""
+            get() {
+                return field
+            }
+    }
+}

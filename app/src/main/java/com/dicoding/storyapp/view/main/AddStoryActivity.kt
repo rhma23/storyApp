@@ -1,6 +1,7 @@
 package com.dicoding.storyapp.view.main
 
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -13,22 +14,26 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.databinding.ActivityAddStoryBinding
 import com.dicoding.storyapp.view.ViewModelFactory
+import com.dicoding.storyapp.view.ViewModelFactoryStory
 import com.dicoding.storyapp.view.welcome.getImageUri
 import com.yalantis.ucrop.UCrop
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var addStoryViewModel: AddStoryViewModel
+    private var token: String? = null
 
-    // Permission launcher for runtime permission requests
+    // Permission launcher
     private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                showToast("Camera permission granted")
-            } else {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (!isGranted) {
                 showToast("Camera permission denied")
             }
         }
@@ -37,24 +42,28 @@ class AddStoryActivity : AppCompatActivity() {
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
-            mainViewModel.currentImageUri.value?.let {
-                // Set the current image URI in the ViewModel after taking a picture
-                mainViewModel.setCurrentImageUri(it)
-                showImage(it)
+            mainViewModel.currentImageUri.value?.let { uri ->
+                mainViewModel.setCurrentImageUri(uri)
+                showImage(uri)
             }
         } else {
             Log.e("Camera", "Image capture failed")
         }
     }
 
-    private fun startCamera() {
-        val imageUri = getImageUri(this)
-        mainViewModel.setCurrentImageUri(imageUri)
-        launcherIntentCamera.launch(imageUri)
-    }
-
-    private fun startCameraX() {
-        Toast.makeText(this, "Fitur ini belum tersedia", Toast.LENGTH_SHORT).show()
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImg = result.data?.data
+            if (selectedImg != null) {
+                startCrop(selectedImg)
+            } else {
+                showToast("No image selected.")
+            }
+        } else {
+            Log.e("Gallery", "Failed to pick image")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,34 +74,36 @@ class AddStoryActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance(applicationContext)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        // Observe the current image URI
+        val factory2 = ViewModelFactoryStory.getInstance(applicationContext)
+        addStoryViewModel = ViewModelProvider(this, factory2)[AddStoryViewModel::class.java]
+
         mainViewModel.currentImageUri.observe(this) { uri ->
             uri?.let {
-                // Display the image in the ImageView
                 showImage(it)
             }
         }
 
-        // Check and request camera permission if not already granted
+        mainViewModel.getSession().observe(this) { userModel ->
+            token = userModel.token
+        }
+
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
-        // Set up button click listeners
-        binding.galleryButton.setOnClickListener { openGallery() }
-        binding.cameraButton.setOnClickListener { requestCameraFeature() }
-        binding.uploadButton.setOnClickListener { uploadStory() }
+        binding.apply {
+            galleryButton.setOnClickListener { openGallery() }
+            cameraButton.setOnClickListener { startCamera() }
+            uploadButton.setOnClickListener { uploadStory() }
+        }
     }
 
-    // Function to check if camera permission is granted
     private fun allPermissionsGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
+            this, REQUIRED_PERMISSION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    // Function to open the gallery
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
@@ -101,7 +112,12 @@ class AddStoryActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
-    // Function to handle cropping the selected image
+    private fun startCamera() {
+        val imageUri = getImageUri(this)
+        mainViewModel.setCurrentImageUri(imageUri)
+        launcherIntentCamera.launch(imageUri)
+    }
+
     private fun startCrop(sourceUri: Uri) {
         val destinationUri = Uri.fromFile(File(cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
         UCrop.of(sourceUri, destinationUri)
@@ -110,78 +126,72 @@ class AddStoryActivity : AppCompatActivity() {
             .start(this)
     }
 
-    // Result launcher for gallery intent
-    private val launcherIntentGallery = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val selectedImg = result.data?.data
-            if (selectedImg != null) {
-                startCrop(selectedImg)
-            } else {
-                Log.e("Gallery", "No image selected")
-            }
-        } else {
-            Log.e("Gallery", "Failed to pick image")
-        }
-    }
-
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == UCrop.REQUEST_CROP) {
-                val resultUri = UCrop.getOutput(data!!)
-                if (resultUri != null) {
-                    mainViewModel.setCurrentImageUri(resultUri) // Update URI ke ViewModel
-                    showImage(resultUri) // Tampilkan gambar yang sudah dicrop
-                }
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            val resultUri = UCrop.getOutput(data!!)
+            if (resultUri != null) {
+                mainViewModel.setCurrentImageUri(resultUri)
+                showImage(resultUri)
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(data!!)
             showToast("Crop error: ${cropError?.message}")
-        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_CANCELED) {
-            // jika cropping dibatalkan, gunakan URI gambar yang lama
-            mainViewModel.currentImageUri.value?.let {
-                showImage(it)
-                // tampilkan gambar yang sebelumnya dipilih
-            }
         }
     }
 
-    // Function to display the selected/cropped image
     private fun showImage(uri: Uri) {
         Log.d("Image URI", "showImage: $uri")
         binding.previewImageView.setImageURI(uri)
     }
 
-    // Placeholder function for camera feature
-    private fun requestCameraFeature() {
-        // Generate a URI to store the captured image
-        val imageUri = getImageUri(this)
-
-        // Save the URI in the ViewModel
-        mainViewModel.setCurrentImageUri(imageUri)
-
-        // Launch the camera to capture the image
-        launcherIntentCamera.launch(imageUri)
-    }
-
-    // Function to handle story upload
     private fun uploadStory() {
-        val description = binding.descriptionEditText.text.toString()
+        val description = binding.descriptionEditText.text.toString().trim()
         if (description.isBlank()) {
             showToast("Description cannot be empty.")
             return
         }
-        val url = mainViewModel.currentImageUri
-        // Assuming the upload logic is implemented
-        Log.d("Upload", "Upload button clicked. Description: $description and url: $url")
-        showToast("Story uploaded successfully.")
+
+        val imageUri = mainViewModel.currentImageUri.value
+        if (imageUri == null) {
+            showToast("No image selected.")
+            return
+        }
+
+        val imageFile = File(imageUri.path!!)
+        if (!imageFile.exists()) {
+            showToast("File does not exist.")
+            return
+        }
+
+        val imagePart = MultipartBody.Part.createFormData(
+            "photo", imageFile.name, imageFile.asRequestBody("image/*".toMediaTypeOrNull())
+        )
+        val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        // Optional latitude and longitude
+        val latPart: RequestBody? = null // Replace with actual latitude if available
+        val lonPart: RequestBody? = null // Replace with actual longitude if available
+
+        token?.let {
+            Log.d(TAG, "uploadStory: Token: $it")
+            addStoryViewModel.uploadStory(it, imagePart, descriptionPart, latPart, lonPart)
+
+            addStoryViewModel.uploadResponse.observe(this) { response ->
+                if (!response.error!!) {
+                    showToast("Story uploaded successfully!")
+                } else {
+                    showToast("Upload failed: ${response.message}")
+                }
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        } ?: run {
+            showToast("Token is not available.")
+        }
     }
 
-    // Utility function to show toast messages
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

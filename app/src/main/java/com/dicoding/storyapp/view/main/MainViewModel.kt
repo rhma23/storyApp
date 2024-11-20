@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.dicoding.storyapp.RetrofitClient
 import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.data.pref.UserModel
+import com.dicoding.storyapp.response.AddNewStoryResponse
 import com.dicoding.storyapp.response.ListStoryItem
 import com.dicoding.storyapp.response.StoryResponse
 import kotlinx.coroutines.launch
@@ -24,6 +25,9 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val _currentImageUri = MutableLiveData<Uri?>()
     val currentImageUri: LiveData<Uri?> = _currentImageUri
+
+    private val _uploadResponse = MutableLiveData<AddNewStoryResponse>()
+    val uploadResponse: LiveData<AddNewStoryResponse> = _uploadResponse
 
 
     fun setCurrentImageUri(uri: Uri?) {
@@ -41,10 +45,7 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    /**
-     * Fetch stories with or without location.
-     * @param withLocation If true, fetch stories with location; otherwise, fetch without.
-     */
+
     fun getAllStories(withLocation: Boolean) {
         viewModelScope.launch {
             // Collecting the session data asynchronously
@@ -77,4 +78,6 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             }
         }
     }
+
+
 }

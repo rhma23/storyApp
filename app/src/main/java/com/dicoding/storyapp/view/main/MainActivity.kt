@@ -5,19 +5,26 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.adapter.StoryAdapter
+import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
-import com.dicoding.storyapp.view.main.DetailActivity
-import com.dicoding.storyapp.response.ListStoryItem
+import okhttp3.Call
+import okhttp3.MultipartBody
+import javax.security.auth.callback.Callback
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
+
+    private val addStoryViewModel by viewModels<AddStoryViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -64,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             }!!
             binding.rvUpcoming.adapter = storyAdapter
         }
+
 
         // Fetch stories from API
         viewModel.getAllStories(false)

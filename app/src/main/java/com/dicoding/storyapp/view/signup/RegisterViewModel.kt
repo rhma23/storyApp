@@ -4,15 +4,9 @@ package com.dicoding.storyapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dicoding.storyapp.ApiService
-import com.dicoding.storyapp.RetrofitClient.apiService
 import com.dicoding.storyapp.data.RegisterRepository
-import com.dicoding.storyapp.data.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import com.dicoding.storyapp.response.RegisterResponse
-import javax.inject.Inject
-import kotlin.math.log
 
 
 class RegisterViewModel (private val repository: RegisterRepository) : ViewModel() {

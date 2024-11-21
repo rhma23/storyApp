@@ -10,7 +10,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.storyapp.databinding.ActivityWelcomeBinding
-import com.dicoding.storyapp.view.signup.SignupActivity
+import com.dicoding.storyapp.view.register.RegisterActivity
 import com.dicoding.storyapp.view.login.LoginActivity
 
 class WelcomeActivity : AppCompatActivity() {
@@ -45,7 +45,7 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         binding.signupButton.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 

@@ -1,5 +1,5 @@
 // SignupActivity.kt
-package com.dicoding.storyapp.view.signup
+package com.dicoding.storyapp.view.register
 
 import android.os.Build
 import android.os.Bundle
@@ -12,13 +12,13 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.storyapp.RetrofitClient
+import com.dicoding.storyapp.config.RetrofitClient
 import com.dicoding.storyapp.factory.RegisterViewModelFactory
-import com.dicoding.storyapp.data.RegisterRepository
+import com.dicoding.storyapp.data.repository.RegisterRepository
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
 import com.dicoding.storyapp.viewmodel.RegisterViewModel // Pastikan import ini ada
 
-class SignupActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var repository: RegisterRepository
 

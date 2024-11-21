@@ -1,4 +1,4 @@
-package com.dicoding.storyapp
+package com.dicoding.storyapp.config
 
 import com.dicoding.storyapp.response.AddNewStoryResponse
 import com.dicoding.storyapp.response.LoginResponse

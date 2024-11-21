@@ -5,18 +5,13 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.adapter.StoryAdapter
-import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.databinding.ActivityMainBinding
-import com.dicoding.storyapp.view.ViewModelFactory
+import com.dicoding.storyapp.factory.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
-import okhttp3.Call
-import okhttp3.MultipartBody
-import javax.security.auth.callback.Callback
 
 class MainActivity : AppCompatActivity() {
 

@@ -11,7 +11,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.dicoding.storyapp.data.UserRepository
+import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.pref.dataStore
 import com.dicoding.storyapp.databinding.ActivityLoginBinding

@@ -4,7 +4,7 @@ package com.dicoding.storyapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dicoding.storyapp.data.RegisterRepository
+import com.dicoding.storyapp.data.repository.RegisterRepository
 import kotlinx.coroutines.launch
 import com.dicoding.storyapp.response.RegisterResponse
 

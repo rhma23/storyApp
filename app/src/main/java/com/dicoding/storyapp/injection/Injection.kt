@@ -1,7 +1,7 @@
-package com.dicoding.storyapp.di
+package com.dicoding.storyapp.injection
 
 import android.content.Context
-import com.dicoding.storyapp.data.UserRepository
+import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.pref.dataStore
 

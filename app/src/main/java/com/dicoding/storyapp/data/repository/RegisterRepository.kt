@@ -1,7 +1,7 @@
-package com.dicoding.storyapp.data
+package com.dicoding.storyapp.data.repository
 
 import com.dicoding.storyapp.response.RegisterResponse
-import com.dicoding.storyapp.ApiService
+import com.dicoding.storyapp.config.ApiService
 import javax.inject.Inject
 
 class RegisterRepository @Inject constructor(

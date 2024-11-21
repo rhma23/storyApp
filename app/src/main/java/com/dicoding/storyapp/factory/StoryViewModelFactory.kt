@@ -1,13 +1,13 @@
-package com.dicoding.storyapp.view
+package com.dicoding.storyapp.factory
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.dicoding.storyapp.data.StoryRepository
-import com.dicoding.storyapp.di.StoryInjection
+import com.dicoding.storyapp.data.repository.StoryRepository
+import com.dicoding.storyapp.injection.StoryInjection
 import com.dicoding.storyapp.view.main.AddStoryViewModel
 
-class ViewModelFactoryStory(private val repository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
+class StoryViewModelFactory(private val repository: StoryRepository) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
@@ -20,15 +20,15 @@ class ViewModelFactoryStory(private val repository: StoryRepository) : ViewModel
 
     companion object {
         @Volatile
-        private var INSTANCE: ViewModelFactoryStory? = null
+        private var INSTANCE: StoryViewModelFactory? = null
         @JvmStatic
-        fun getInstance(context: Context): ViewModelFactoryStory {
+        fun getInstance(context: Context): StoryViewModelFactory {
             if (INSTANCE == null) {
-                synchronized(ViewModelFactoryStory::class.java) {
-                    INSTANCE = ViewModelFactoryStory(StoryInjection.provideStoryRepository(context))
+                synchronized(StoryViewModelFactory::class.java) {
+                    INSTANCE = StoryViewModelFactory(StoryInjection.provideStoryRepository(context))
                 }
             }
-            return INSTANCE as ViewModelFactoryStory
+            return INSTANCE as StoryViewModelFactory
         }
     }
 }

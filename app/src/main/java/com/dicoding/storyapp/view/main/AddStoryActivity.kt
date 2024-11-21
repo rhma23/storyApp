@@ -159,10 +159,10 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
         val imageFile = File(imageUri.path!!)
-        if (!imageFile.exists()) {
-            showToast("File does not exist.")
-            return
-        }
+//        if (!imageFile.exists()) {
+//            showToast("File does not exist.")
+//            return
+//        }
 
         val imagePart = MultipartBody.Part.createFormData(
             "photo", imageFile.name, imageFile.asRequestBody("image/*".toMediaTypeOrNull())

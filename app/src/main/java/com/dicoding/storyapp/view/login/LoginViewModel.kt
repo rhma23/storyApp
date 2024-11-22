@@ -1,12 +1,11 @@
-// RegisterViewModel.kt
-package com.dicoding.storyapp.viewmodel
+package com.dicoding.storyapp.view.login
 
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dicoding.storyapp.data.UserRepository
+import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.data.pref.UserPreference
 import kotlinx.coroutines.CoroutineScope
@@ -16,10 +15,8 @@ import com.dicoding.storyapp.response.LoginResponse
 
 private lateinit var userPreference: UserPreference
 
-
 class LoginViewModel (private val repository: UserRepository) : ViewModel() {
 
-    // Fungsi untuk registrasi pengguna
     fun loginUser(
         email: String,
         password: String,

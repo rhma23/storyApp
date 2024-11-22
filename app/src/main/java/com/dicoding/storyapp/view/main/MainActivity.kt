@@ -11,16 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyapp.R
 import com.dicoding.storyapp.adapter.StoryAdapter
 import com.dicoding.storyapp.databinding.ActivityMainBinding
-import com.dicoding.storyapp.view.ViewModelFactory
+import com.dicoding.storyapp.factory.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
-
-    private val addStoryViewModel by viewModels<AddStoryViewModel> {
         ViewModelFactory.getInstance(this)
     }
 
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.rvUpcoming.apply {
+        binding.rvStory.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = storyAdapter
         }
@@ -60,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }!!
-            binding.rvUpcoming.adapter = storyAdapter
+            binding.rvStory.adapter = storyAdapter
         }
 
         viewModel.getAllStories(false)

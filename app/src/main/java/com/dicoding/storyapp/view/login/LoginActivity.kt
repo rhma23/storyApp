@@ -11,30 +11,25 @@ import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.dicoding.storyapp.data.UserRepository
+import com.dicoding.storyapp.data.repository.UserRepository
 import com.dicoding.storyapp.data.pref.UserPreference
 import com.dicoding.storyapp.data.pref.dataStore
 import com.dicoding.storyapp.databinding.ActivityLoginBinding
 import com.dicoding.storyapp.factory.LoginViewModelFactory
 import com.dicoding.storyapp.view.main.MainActivity
-import com.dicoding.storyapp.viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var repository: UserRepository
     private lateinit var loginViewModel: LoginViewModel
-
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var userPreference: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Initialize UserPreference and UserRepository
+
         val userPreference = UserPreference.getInstance(dataStore)
         val repository = UserRepository.getInstance(userPreference)
 
-        // Initialize ViewModel using LoginViewModelFactory
         val factory = LoginViewModelFactory(repository)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
@@ -61,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            // Panggil fungsi loginUser dari LoginViewModel
             loginViewModel.loginUser(
                 email, password,
                 { success ->
@@ -91,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 },
-                dataStore = dataStore  // Pass the actual dataStore instance here
+                dataStore = dataStore
             )
 
         }

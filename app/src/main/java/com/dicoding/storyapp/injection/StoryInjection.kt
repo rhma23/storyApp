@@ -1,8 +1,8 @@
-package com.dicoding.storyapp.di
+package com.dicoding.storyapp.injection
 
 import android.content.Context
-import com.dicoding.storyapp.ApiService
-import com.dicoding.storyapp.data.StoryRepository
+import com.dicoding.storyapp.config.ApiService
+import com.dicoding.storyapp.data.repository.StoryRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -78,7 +78,7 @@
             android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#673AB7"
+            android:backgroundTint="@color/navy"
             android:gravity="top"
             android:inputType="text"
             android:minLines="1" />

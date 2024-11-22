@@ -20,7 +20,6 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Mengambil data story yang diteruskan dari MainActivity
         val story = intent.getParcelableExtra<ListStoryItem>("EXTRA_STORY")
 
         story?.let {
@@ -29,7 +28,6 @@ class DetailActivity : AppCompatActivity() {
             binding.tvStoryDescription.text = it.description
             binding.tvStoryCreatedAt.text = it.createdAt
 
-            // Mendapatkan latitude dan longitude
             val lat = it.lat
             val lon = it.lon
 

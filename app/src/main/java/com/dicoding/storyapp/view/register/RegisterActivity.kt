@@ -1,5 +1,4 @@
-// SignupActivity.kt
-package com.dicoding.storyapp.view.signup
+package com.dicoding.storyapp.view.register
 
 import android.os.Build
 import android.os.Bundle
@@ -12,27 +11,24 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.storyapp.RetrofitClient
-import com.dicoding.storyapp.ViewModelFactory
-import com.dicoding.storyapp.data.RegisterRepository
+import com.dicoding.storyapp.config.RetrofitClient
+import com.dicoding.storyapp.factory.RegisterViewModelFactory
+import com.dicoding.storyapp.data.repository.RegisterRepository
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
-import com.dicoding.storyapp.viewmodel.RegisterViewModel // Pastikan import ini ada
 
-class SignupActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var repository: RegisterRepository
 
     private val registerViewModel: RegisterViewModel by viewModels {
-        ViewModelFactory(repository)
+        RegisterViewModelFactory(repository)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi repository dengan apiService dari RetrofitClient
         repository = RegisterRepository.getInstance(RetrofitClient.apiService)
 
         setupView()
@@ -60,10 +56,9 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            val TAG = "setupAction";
+            val TAG = "setupAction"
             Log.d(TAG, "setupAction: $name, $email, $password")
 
-            // Cek validasi sebelum melanjutkan
             if (binding.emailEditTextLayout.error == null && binding.passwordEditTextLayout.error == null) {
                 registerViewModel.registerUser(name, email, password) { success ->
                     if (success) {
@@ -75,7 +70,6 @@ class SignupActivity : AppCompatActivity() {
                             show()
                         }
                     } else {
-                        // Tampilkan pesan error jika gagal
                         binding.emailEditTextLayout.error = "Pendaftaran gagal. Coba lagi!"
                     }
                 }

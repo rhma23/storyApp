@@ -8,8 +8,5 @@ data class UserModel(
 ) {
     companion object {
         val name: String = ""
-            get() {
-                return field
-            }
     }
 }

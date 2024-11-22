@@ -20,10 +20,6 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private val addStoryViewModel by viewModels<AddStoryViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var storyAdapter: StoryAdapter
 
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.rvUpcoming.apply {
+        binding.rvStory.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = storyAdapter
         }
@@ -60,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }!!
-            binding.rvUpcoming.adapter = storyAdapter
+            binding.rvStory.adapter = storyAdapter
         }
 
         viewModel.getAllStories(false)

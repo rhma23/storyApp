@@ -35,15 +35,12 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var addStoryViewModel: AddStoryViewModel
     private var token: String? = null
 
-    // Permission launcher
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (!isGranted) {
                 showToast("Camera permission denied")
             }
         }
-
-
 
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.TakePicture()
@@ -75,8 +72,6 @@ class AddStoryActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
 
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
@@ -177,7 +172,6 @@ class AddStoryActivity : AppCompatActivity() {
             File(imageUri.path!!)
         }
 
-        // Compress the image if it's larger than 1MB
         val compressedFile = if (imageFile.length() > 1_048_576) {
             compressImage(this, Uri.fromFile(imageFile))
         } else {
@@ -190,7 +184,6 @@ class AddStoryActivity : AppCompatActivity() {
 
         val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        // Optional latitude and longitude
         val latPart: RequestBody? = null // Replace with actual latitude if available
         val lonPart: RequestBody? = null // Replace with actual longitude if available
 
@@ -213,7 +206,6 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -228,7 +220,7 @@ class AddStoryActivity : AppCompatActivity() {
                 inputStream.copyTo(outputStream)
             }
         }
-        return destinationFile // Return the destination file
+        return destinationFile
     }
 
     fun compressImage(context: Context, imageUri: Uri, maxSizeInBytes: Int = 1_048_576): File {
@@ -242,7 +234,7 @@ class AddStoryActivity : AppCompatActivity() {
         do {
             outputStream.reset()
             compressedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
-            quality -= 5 // Reduce quality by 5% in each iteration
+            quality -= 5
         } while (outputStream.size() > maxSizeInBytes && quality > 0)
 
         val compressedFile = File(context.cacheDir, "compressed_image.jpg")
@@ -252,5 +244,4 @@ class AddStoryActivity : AppCompatActivity() {
 
         return compressedFile
     }
-
 }

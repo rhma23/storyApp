@@ -27,14 +27,11 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
     val currentImageUri: LiveData<Uri?> = _currentImageUri
 
     private val _uploadResponse = MutableLiveData<AddNewStoryResponse>()
-    val uploadResponse: LiveData<AddNewStoryResponse> = _uploadResponse
-
 
     fun setCurrentImageUri(uri: Uri?) {
         _currentImageUri.value = uri
     }
 
-    // Observes user session and updates the LiveData
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
@@ -48,15 +45,13 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getAllStories(withLocation: Boolean) {
         viewModelScope.launch {
-            // Collecting the session data asynchronously
+
             repository.getSession().collect { user ->
-                val token = user.token  // Assuming 'UserModel' has a 'token' property
+                val token = user.token
                 Log.d("Token", "Token: $token")
 
-                // Determine if we want stories with or without location (0 or 1)
                 val locationParam = if (withLocation) "1" else "0"
 
-                // Make the network call to get stories with or without location using the token
                 RetrofitClient.apiService.getAllStories("Bearer $token", locationParam).enqueue(object : Callback<StoryResponse> {
                     override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                         if (response.isSuccessful) {
@@ -78,6 +73,4 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             }
         }
     }
-
-
 }

@@ -1,4 +1,3 @@
-// SignupActivity.kt
 package com.dicoding.storyapp.view.register
 
 import android.os.Build
@@ -16,7 +15,6 @@ import com.dicoding.storyapp.config.RetrofitClient
 import com.dicoding.storyapp.factory.RegisterViewModelFactory
 import com.dicoding.storyapp.data.repository.RegisterRepository
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
-import com.dicoding.storyapp.viewmodel.RegisterViewModel // Pastikan import ini ada
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -26,13 +24,11 @@ class RegisterActivity : AppCompatActivity() {
         RegisterViewModelFactory(repository)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inisialisasi repository dengan apiService dari RetrofitClient
         repository = RegisterRepository.getInstance(RetrofitClient.apiService)
 
         setupView()
@@ -60,10 +56,9 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            val TAG = "setupAction";
+            val TAG = "setupAction"
             Log.d(TAG, "setupAction: $name, $email, $password")
 
-            // Cek validasi sebelum melanjutkan
             if (binding.emailEditTextLayout.error == null && binding.passwordEditTextLayout.error == null) {
                 registerViewModel.registerUser(name, email, password) { success ->
                     if (success) {
@@ -75,7 +70,6 @@ class RegisterActivity : AppCompatActivity() {
                             show()
                         }
                     } else {
-                        // Tampilkan pesan error jika gagal
                         binding.emailEditTextLayout.error = "Pendaftaran gagal. Coba lagi!"
                     }
                 }

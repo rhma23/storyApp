@@ -3,7 +3,7 @@ package com.dicoding.storyapp.factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.data.repository.UserRepository
-import com.dicoding.storyapp.viewmodel.LoginViewModel
+import com.dicoding.storyapp.view.login.LoginViewModel
 
 class LoginViewModelFactory(
     private val repository: UserRepository

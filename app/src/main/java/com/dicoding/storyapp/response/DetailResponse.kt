@@ -17,6 +17,3 @@ data class Story(
 	val id: String? = null,
 	val lat: String? = null
 ): Serializable
-
-
-

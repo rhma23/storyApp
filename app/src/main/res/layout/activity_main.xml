@@ -65,7 +65,7 @@
                 android:elevation="4dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvUpcoming"
+                android:id="@+id/rvStory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"

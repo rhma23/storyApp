@@ -5,18 +5,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.storyapp.R
 import com.dicoding.storyapp.adapter.StoryAdapter
-import com.dicoding.storyapp.data.pref.UserModel
 import com.dicoding.storyapp.databinding.ActivityMainBinding
 import com.dicoding.storyapp.view.ViewModelFactory
 import com.dicoding.storyapp.view.welcome.WelcomeActivity
-import okhttp3.Call
-import okhttp3.MultipartBody
-import javax.security.auth.callback.Callback
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,11 +32,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize RecyclerView
         storyAdapter = StoryAdapter(emptyList()) { story ->
-            // When an item is clicked, start DetailActivity with the selected story
             val intent = Intent(this, DetailActivity::class.java).apply {
-                putExtra("EXTRA_STORY", story) // Pass the selected story as a Parcelable extra
+                putExtra("EXTRA_STORY", story)
             }
             startActivity(intent)
         }
@@ -50,7 +44,6 @@ class MainActivity : AppCompatActivity() {
             adapter = storyAdapter
         }
 
-        // Observe session and check login status
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -58,13 +51,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Observe stories data
         viewModel.storyLiveData.observe(this) { stories ->
             storyAdapter = stories?.let {
                 StoryAdapter(it) { story ->
-                    // Handle item click here as well, if you want additional actions
                     val intent = Intent(this, DetailActivity::class.java).apply {
-                        putExtra("EXTRA_STORY", story) // Pass the selected story as a Parcelable extra
+                        putExtra("EXTRA_STORY", story)
                     }
                     startActivity(intent)
                 }
@@ -72,8 +63,6 @@ class MainActivity : AppCompatActivity() {
             binding.rvUpcoming.adapter = storyAdapter
         }
 
-
-        // Fetch stories from API
         viewModel.getAllStories(false)
 
         setupView()
@@ -94,8 +83,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
+
+        val toolbar = binding.toolbar
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.logout -> {
+                    viewModel.logout()
+                    true
+                }
+                else -> false
+            }
         }
 
         binding.addButton.setOnClickListener {

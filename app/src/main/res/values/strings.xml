@@ -16,4 +16,20 @@
     <string name="story">Story</string>
     <string name="Gallery">Gallery</string>
     <string name="Camera">Camera</string>
+    <string name="description">Description</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+    <string name="story_image">Story Image</string>
+    <string name="story_name">Story Name</string>
+    <string name="story_description">Story Description</string>
+    <string name="created_at">Created At</string>
+    <string name="location">Location</string>
+    <string name="add_story">add story</string>
+    <string name="log_out">Logout</string>
+    <string name="addStory">+ Add Story</string>
+    <string name="nama">Nama :</string>
+    <string name="deskripsi">Deskripsi :</string>
+    <string name="tanggal_dibuat">Tanggal Dibuat :</string>
+    <string name="lokasi">Lokasi :</string>
 </resources>

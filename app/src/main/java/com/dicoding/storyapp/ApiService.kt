@@ -6,7 +6,6 @@ import com.dicoding.storyapp.response.RegisterResponse
 import com.dicoding.storyapp.response.StoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -36,7 +35,7 @@ interface ApiService {
     @GET("stories")
     fun getAllStories(
         @Header("Authorization") token: String,
-        @Query("location") location: String // "0" for stories without location, "1" for stories with location
+        @Query("location") location: String
     ): Call<StoryResponse>
 
 

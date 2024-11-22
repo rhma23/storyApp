@@ -1,13 +1,12 @@
 package com.dicoding.storyapp.factory
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dicoding.storyapp.data.UserRepository
 import com.dicoding.storyapp.viewmodel.LoginViewModel
 
 class LoginViewModelFactory(
-    private val repository: UserRepository // Ganti dengan parameter yang Anda butuhkan
+    private val repository: UserRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {

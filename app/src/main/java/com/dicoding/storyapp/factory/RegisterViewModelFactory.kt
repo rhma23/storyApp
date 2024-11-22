@@ -6,7 +6,7 @@ import com.dicoding.storyapp.data.RegisterRepository
 import com.dicoding.storyapp.viewmodel.RegisterViewModel
 
 class RegisterViewModelFactory(
-    private val repository: RegisterRepository // Ganti dengan parameter yang Anda butuhkan
+    private val repository: RegisterRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {

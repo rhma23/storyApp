@@ -134,6 +134,7 @@
         android:layout_marginEnd="32dp"
         android:alpha="0"
         android:backgroundTint="@color/navy"
+        android:textStyle="bold"
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

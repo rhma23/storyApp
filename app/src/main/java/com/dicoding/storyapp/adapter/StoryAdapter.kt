@@ -1,5 +1,5 @@
 package com.dicoding.storyapp.adapter
-//rahma
+
 import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
@@ -28,7 +28,6 @@ class StoryAdapter(private val stories: List<ListStoryItem?>, private val onItem
         holder.nameTextView.text = story?.name
         holder.descriptionTextView.text = story?.description
 
-        // Use Glide to load image into ImageView
         Glide.with(holder.itemView)
             .load(story?.photoUrl)
             .into(holder.imageView)
@@ -36,16 +35,14 @@ class StoryAdapter(private val stories: List<ListStoryItem?>, private val onItem
         holder.itemView.setOnClickListener {
             story?.let { selectedStory ->
                 val intent = Intent(holder.itemView.context, DetailActivity::class.java)
-                intent.putExtra("EXTRA_STORY", selectedStory) // Pass the data to DetailActivity
+                intent.putExtra("EXTRA_STORY", selectedStory)
 
-                // Create the animation for the shared element
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     holder.itemView.context as Activity,
                     holder.imageView,
-                    "storyImageTransition" // This name should match the transitionName in DetailActivity
+                    "storyImageTransition"
                 )
 
-                // Start the activity with the shared element transition
                 holder.itemView.context.startActivity(intent, options.toBundle())
             }
         }

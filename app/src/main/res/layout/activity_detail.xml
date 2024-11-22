@@ -38,7 +38,7 @@
                     android:text="@string/story_name"
                     android:padding="8dp" />
             </TableRow>
->
+
             <TableRow>
                 <TextView
                     android:layout_width="wrap_content"

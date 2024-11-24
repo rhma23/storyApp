@@ -3,6 +3,9 @@ package com.dicoding.storyapp.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -61,6 +64,19 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getAllStories(false)
 
+        binding.progressBarHome.visibility = View.VISIBLE
+        binding.rvStory.visibility = View.INVISIBLE
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.storyLiveData.observe(this) { stories ->
+                if (stories.isNullOrEmpty()) {
+                    binding.rvStory.visibility = View.INVISIBLE
+                } else {
+                    binding.rvStory.visibility = View.VISIBLE
+                }
+                binding.progressBarHome.visibility = View.GONE
+            }
+        }, 1000)
         setupView()
         setupAction()
     }

@@ -2,10 +2,7 @@ package com.dicoding.storyapp.view.register
 
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.util.Patterns
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -15,10 +12,14 @@ import com.dicoding.storyapp.config.RetrofitClient
 import com.dicoding.storyapp.factory.RegisterViewModelFactory
 import com.dicoding.storyapp.data.repository.RegisterRepository
 import com.dicoding.storyapp.databinding.ActivitySignupBinding
+import com.dicoding.storyapp.ui.EmailValidation
+import com.dicoding.storyapp.ui.PasswordValidation
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private lateinit var repository: RegisterRepository
+    private lateinit var passwordValidation: PasswordValidation
+    private lateinit var emailValidation: EmailValidation
 
     private val registerViewModel: RegisterViewModel by viewModels {
         RegisterViewModelFactory(repository)
@@ -33,8 +34,8 @@ class RegisterActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
-        setupPasswordValidation()
-        setupEmailValidation()
+        passwordValidation = binding.passwordEditText
+        emailValidation = binding.emailEditText
     }
 
     private fun setupView() {
@@ -70,42 +71,16 @@ class RegisterActivity : AppCompatActivity() {
                             show()
                         }
                     } else {
-                        binding.emailEditTextLayout.error = "Pendaftaran gagal. Coba lagi!"
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Oops!")
+                            setMessage("Akun dengan $email gagal didaftarkan. Coba lagi ya!")
+                            setPositiveButton("Ulangi") { _, _ -> finish() }
+                            create()
+                            show()
+                        }
                     }
                 }
             }
         }
-    }
-
-    private fun setupPasswordValidation() {
-        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s != null && s.length < 8) {
-                    binding.passwordEditTextLayout.error = "Password tidak boleh kurang dari 8 karakter"
-                } else {
-                    binding.passwordEditTextLayout.error = null
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-    }
-
-    private fun setupEmailValidation() {
-        binding.emailEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s != null && !Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
-                    binding.emailEditTextLayout.error = "Format email tidak valid"
-                } else {
-                    binding.emailEditTextLayout.error = null
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
     }
 }

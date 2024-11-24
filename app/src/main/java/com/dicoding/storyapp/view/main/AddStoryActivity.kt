@@ -27,6 +27,11 @@ import java.io.File
 import java.io.FileOutputStream
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import com.dicoding.storyapp.R
+import com.dicoding.storyapp.ui.MyButton
 import java.io.ByteArrayOutputStream
 
 class AddStoryActivity : AppCompatActivity() {
@@ -34,6 +39,7 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var addStoryViewModel: AddStoryViewModel
     private var token: String? = null
+    private lateinit var myButton: MyButton
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -51,7 +57,9 @@ class AddStoryActivity : AppCompatActivity() {
                 showImage(uri)
             }
         } else {
+            binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
             Log.e("Camera", "Image capture failed")
+            mainViewModel.setCurrentImageUri(null)
         }
     }
 
@@ -76,6 +84,7 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        myButton = findViewById(R.id.uploadButton)
 
         val factory = ViewModelFactory.getInstance(applicationContext)
         mainViewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
@@ -97,11 +106,16 @@ class AddStoryActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
+        myButton.isEnabled = true
+
         binding.apply {
             galleryButton.setOnClickListener { openGallery() }
             cameraButton.setOnClickListener { startCamera() }
-            uploadButton.setOnClickListener { uploadStory() }
+            uploadButton.setOnClickListener {
+                uploadStory()
+            }
         }
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     private fun allPermissionsGranted(): Boolean {
@@ -120,8 +134,10 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun startCamera() {
         val imageUri = getImageUri(this)
-        mainViewModel.setCurrentImageUri(imageUri)
-        launcherIntentCamera.launch(imageUri)
+        if (imageUri != null) {
+            mainViewModel.setCurrentImageUri(imageUri)
+            launcherIntentCamera.launch(imageUri)
+        }
     }
 
     private fun startCrop(sourceUri: Uri) {
@@ -139,6 +155,8 @@ class AddStoryActivity : AppCompatActivity() {
             if (resultUri != null) {
                 mainViewModel.setCurrentImageUri(resultUri)
                 showImage(resultUri)
+            }else {
+                showToast("Crop error: resultUri is null")
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(data!!)
@@ -147,20 +165,21 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun showImage(uri: Uri) {
-        Log.d("Image URI", "showImage: $uri")
-        binding.previewImageView.setImageURI(uri)
+        if (uri != null) {
+            binding.previewImageView.setImageURI(uri)
+        }
     }
 
     private fun uploadStory() {
-        val description = binding.descriptionEditText.text.toString().trim()
-        if (description.isBlank()) {
-            showToast("Description cannot be empty.")
-            return
-        }
-
         val imageUri = mainViewModel.currentImageUri.value
         if (imageUri == null) {
             showToast("No image selected.")
+            return
+        }
+
+        val description = binding.descriptionEditText.text.toString().trim()
+        if (description.isBlank()) {
+            showToast("Description cannot be empty.")
             return
         }
 
@@ -190,20 +209,25 @@ class AddStoryActivity : AppCompatActivity() {
         token?.let {
             Log.d(TAG, "uploadStory: Token: $it")
             addStoryViewModel.uploadStory(it, imagePart, descriptionPart, latPart, lonPart)
-
-            addStoryViewModel.uploadResponse.observe(this) { response ->
-                if (!response.error!!) {
-                    showToast("Story uploaded successfully!")
-                } else {
-                    showToast("Upload failed: ${response.message}")
-                }
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            }
+                Handler(Looper.getMainLooper()).postDelayed({
+                    addStoryViewModel.uploadResponse.observe(this) { response ->
+                        if (!response.error!!) {
+                            showToast("Story uploaded successfully!")
+                        } else {
+                            showToast("Upload failed: ${response.message}")
+                        }
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        binding.progressBar.visibility = View.GONE
+                        myButton.isEnabled = true
+                    }
+                }, 1000)
         } ?: run {
             showToast("Token is not available.")
         }
+        binding.progressBar.visibility = View.VISIBLE
+        myButton.isEnabled = false
     }
 
     private fun showToast(message: String) {
@@ -244,4 +268,5 @@ class AddStoryActivity : AppCompatActivity() {
 
         return compressedFile
     }
+
 }

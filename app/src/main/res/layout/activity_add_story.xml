@@ -13,38 +13,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp">
-
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progressIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/previewImageView"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="Preview Image"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_place_holder" />
-
+            android:layout_height="wrap_content">
             <LinearLayout
-                android:id="@+id/buttonLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp">
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/previewImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="Preview Image"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/ic_place_holder" />
+
+                <LinearLayout
+                    android:id="@+id/buttonLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp">
 
                 <Button
                     android:id="@+id/cameraButton"
@@ -66,38 +69,47 @@
                     android:backgroundTint="@color/navy"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionLayout"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginTop="30dp"
-                android:hint="@string/description">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/descriptionEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:backgroundTint="@color/navy"
-                    android:gravity="top"
-                    android:inputType="text"
-                    android:minLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="150dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginTop="30dp"
+                    android:hint="@string/description">
 
-            <Button
-                android:id="@+id/uploadButton"
-                android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/descriptionEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/navy"
+                        android:gravity="top"
+                        android:inputType="text"
+                        android:minLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.dicoding.storyapp.ui.MyButton
+                    android:id="@+id/uploadButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/upload"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:enabled="false"/>
+            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/upload"
-                android:textStyle="bold"
-                android:backgroundTint="@color/navy"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
+                android:layout_gravity="center"
+                android:elevation="100dp" />
+        </FrameLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

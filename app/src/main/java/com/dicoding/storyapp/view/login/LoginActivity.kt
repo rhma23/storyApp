@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
                     if (success) {
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
-                            setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                            setMessage("Anda berhasil login. Sudah tidak sabar untuk berbagi cerita ya?")
                             setPositiveButton("Lanjut") { _, _ ->
                                 val intent = Intent(context, MainActivity::class.java)
                                 intent.flags =

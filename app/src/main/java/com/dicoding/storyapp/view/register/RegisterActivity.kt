@@ -64,7 +64,7 @@ class RegisterActivity : AppCompatActivity() {
                     if (success) {
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
-                            setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                            setMessage("Akun dengan $email sudah jadi nih. Yuk, mulai buat dan lihat story seru dari teman-teman!")
                             setPositiveButton("Lanjut") { _, _ -> finish() }
                             create()
                             show()

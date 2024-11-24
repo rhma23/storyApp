@@ -2,7 +2,10 @@ package com.dicoding.storyapp.view.register
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -32,6 +35,8 @@ class RegisterActivity : AppCompatActivity() {
 
         repository = RegisterRepository.getInstance(RetrofitClient.apiService)
 
+        binding.progressBarRegist.visibility = View.GONE
+
         setupView()
         setupAction()
         passwordValidation = binding.passwordEditText
@@ -60,8 +65,17 @@ class RegisterActivity : AppCompatActivity() {
             val TAG = "setupAction"
             Log.d(TAG, "setupAction: $name, $email, $password")
 
+            binding.signupButton.isEnabled = false
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.progressBarRegist.visibility = View.VISIBLE
+
             if (binding.emailEditTextLayout.error == null && binding.passwordEditTextLayout.error == null) {
                 registerViewModel.registerUser(name, email, password) { success ->
+
+                    binding.progressBarRegist.visibility = View.GONE
+                    binding.signupButton.isEnabled = true
+
                     if (success) {
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
@@ -80,7 +94,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
+            }}, 1000)
         }
     }
 }

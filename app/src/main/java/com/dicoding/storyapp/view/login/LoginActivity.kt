@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -33,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
         val factory = LoginViewModelFactory(repository)
         loginViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
+        binding.progressBarLogin.visibility = View.GONE
+
         setupView()
         setupAction()
         playAnimation()
@@ -56,9 +60,17 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
+            binding.progressBarLogin.visibility = View.VISIBLE
+            binding.loginButton.isEnabled = false
+
+            Handler(Looper.getMainLooper()).postDelayed({
             loginViewModel.loginUser(
                 email, password,
                 { success ->
+
+                    binding.progressBarLogin.visibility = View.GONE
+                    binding.loginButton.isEnabled = true
+
                     if (success) {
                         AlertDialog.Builder(this).apply {
                             setTitle("Yeah!")
@@ -87,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                 },
                 dataStore = dataStore
             )
-
+            }, 1000)
         }
     }
 

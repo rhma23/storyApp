@@ -12,6 +12,10 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -151,6 +155,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout" />
 
+            <ProgressBar
+                android:id="@+id/progressBarRegist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineHorizontal"
             android:layout_width="wrap_content"
@@ -167,5 +180,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

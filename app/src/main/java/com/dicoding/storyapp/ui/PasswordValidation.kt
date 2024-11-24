@@ -32,18 +32,10 @@ class PasswordValidation @JvmOverloads constructor(
 
     private fun validatePassword(password: String) {
         val minLength = 8
-        val hasDigit = password.any { it.isDigit() }
-        val hasSpecialChar = password.any { !it.isLetterOrDigit() }
 
         when {
             password.length < minLength -> {
                 error = "Password harus minimal $minLength karakter"
-            }
-            !hasDigit -> {
-                error = "Password harus mengandung angka"
-            }
-            !hasSpecialChar -> {
-                error = "Password harus mengandung setidaknya special character"
             }
             else -> {
                 error = null
@@ -55,5 +47,4 @@ class PasswordValidation @JvmOverloads constructor(
 
         return false
     }
-
 }

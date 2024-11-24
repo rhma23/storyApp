@@ -203,8 +203,8 @@ class AddStoryActivity : AppCompatActivity() {
 
         val descriptionPart = description.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val latPart: RequestBody? = null // Replace with actual latitude if available
-        val lonPart: RequestBody? = null // Replace with actual longitude if available
+        val latPart: RequestBody? = null
+        val lonPart: RequestBody? = null
 
         token?.let {
             Log.d(TAG, "uploadStory: Token: $it")
